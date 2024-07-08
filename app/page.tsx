@@ -1,7 +1,12 @@
-export default function Home() {
+import { authorizedURL } from "@/app/lib/actions";
+import Main from "./component";
+
+export default async function Home() {
+  const url = await authorizedURL();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between mt-4">
-      <h1 className="uppercase text-xl">Favourite Artists</h1>
+    <main className="">
+      <Main url={url} />
     </main>
   );
 }
