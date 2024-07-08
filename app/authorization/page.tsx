@@ -2,10 +2,18 @@
 
 import { useSearchParams } from "next/navigation";
 import { tokens as getTokens } from "../lib/actions";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function Home() {
+  return (
+    <Suspense>
+      <InnerHome />
+    </Suspense>
+  );
+}
+
+const InnerHome = () => {
   const [areTokensSet, setAreTokensSet] = useState(false);
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
@@ -48,4 +56,4 @@ export default function Home() {
       </Link>
     </div>
   );
-}
+};

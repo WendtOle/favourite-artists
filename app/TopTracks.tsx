@@ -25,7 +25,7 @@ export const TopTracks = ({ accessToken }: { accessToken: string }) => {
   return (
     <div>
       <div className="flex justify-between m-2 items-center">
-        <h2 className="text-lg underline">Top Artists</h2>
+        <h2 className="text-lg underline">Top Tracks</h2>
         <TimeRangeToggle
           setTimeRange={setTimeRange}
           selectedTimeRange={timeRange}
