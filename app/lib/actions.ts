@@ -3,9 +3,8 @@
 import SpotifyWebApi from "spotify-web-api-node";
 
 export const authorizedURL = async () => {
-  const { origin } = window.location;
   const spotifyApi = new SpotifyWebApi({
-    redirectUri: `${origin}/authorization`,
+    redirectUri: process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI,
     clientId: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID,
     clientSecret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
   });
@@ -15,9 +14,8 @@ export const authorizedURL = async () => {
 };
 
 export const tokens = async (code: string) => {
-  const { origin } = window.location;
   const spotifyApi = new SpotifyWebApi({
-    redirectUri: `${origin}/authorization`,
+    redirectUri: process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI,
     clientId: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID,
     clientSecret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
   });
