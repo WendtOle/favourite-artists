@@ -28,7 +28,7 @@ export default function Main({ url }: { url: string }) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <TopArtists accessToken={accessToken} />
       <TopTracks accessToken={accessToken} />
     </div>

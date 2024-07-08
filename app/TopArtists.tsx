@@ -23,17 +23,20 @@ export const TopArtists = ({ accessToken }: { accessToken: string }) => {
   }
 
   return (
-    <div>
-      <div className="flex justify-between m-2 items-center">
-        <h2 className="text-lg underline">Top Artists</h2>
+    <div className="max-w-2xl">
+      <div className="flex justify-between items-center p-2 w-full">
+        <h2 className="text-xl">Top Artists</h2>
         <TimeRangeToggle
           setTimeRange={setTimeRange}
           selectedTimeRange={timeRange}
         />
       </div>
-      <ul className="ml-4">
+      <ul className="ml-4 flex flex-wrap">
         {artists.map((artist) => (
-          <li key={artist.id}>
+          <li
+            key={artist.id}
+            className="border px-3 py-1 mr-1 mb-1 text-sm rounded-full"
+          >
             <Link href={artist.external_urls.spotify} target="_blank">
               {artist.name}
             </Link>

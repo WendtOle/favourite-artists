@@ -23,28 +23,33 @@ export const TopTracks = ({ accessToken }: { accessToken: string }) => {
   }
 
   return (
-    <div>
-      <div className="flex justify-between m-2 items-center">
-        <h2 className="text-lg underline">Top Tracks</h2>
+    <div className="max-w-2xl w-full">
+      <div className="flex justify-between items-center p-2 w-full">
+        <h2 className="text-xl">Top Tracks</h2>
         <TimeRangeToggle
           setTimeRange={setTimeRange}
           selectedTimeRange={timeRange}
         />
       </div>
-      <ul className="ml-4">
+      <ul className="ml-4 max-h-96 overflow-scroll">
         {tracks.map((track) => (
-          <li key={track.id}>
+          <li key={track.id} className="mb-2 text-sm">
             <Link href={track.external_urls.spotify} target="_blank">
-              {track.name} -{" "}
-              {track.artists.reduce((acc, artist) => {
-                if (acc.endsWith("...")) {
-                  return acc;
-                }
-                if (acc.length > 10) {
-                  return acc + "...";
-                }
-                return acc + artist.name + ", ";
-              }, "")}
+              <p>{track.name}</p>
+              <p className="text-slate-500">
+                {track.artists.reduce((acc, artist) => {
+                  if (acc.endsWith("...")) {
+                    return acc;
+                  }
+                  if (acc.length > 25) {
+                    return acc + "...";
+                  }
+                  if (acc.length === 0) {
+                    return artist.name;
+                  }
+                  return acc + ", " + artist.name;
+                }, "")}
+              </p>
             </Link>
           </li>
         ))}
