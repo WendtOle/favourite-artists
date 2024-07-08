@@ -31,7 +31,7 @@ export const TopTracks = ({ accessToken }: { accessToken: string }) => {
           selectedTimeRange={timeRange}
         />
       </div>
-      <ul className="ml-4 max-h-96 overflow-scroll">
+      <ul className="ml-4 max-h-80 overflow-scroll">
         {tracks.map((track) => (
           <li key={track.id} className="mb-2 text-sm">
             <Link href={track.external_urls.spotify} target="_blank">
