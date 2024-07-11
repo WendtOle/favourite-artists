@@ -96,8 +96,9 @@ export const topArtists = async (
   try {
     const response = await spotifyApi.getMyTopArtists({
       time_range: timeRange,
+      limit: 50,
     });
-    return response.body.items;
+    return response.body;
   } catch (error) {
     console.error({ error });
   }
@@ -106,14 +107,15 @@ export const topArtists = async (
 export const topTracks = async (
   authorizationTokens: AuthorizationTokens,
   timeRange: TimeRange
-): Promise<SpotifyApi.TrackObjectFull[] | undefined> => {
+) => {
   const spotifyApi = await getSpotifyApi(authorizationTokens);
 
   try {
     const response = await spotifyApi.getMyTopTracks({
       time_range: timeRange,
+      limit: 50,
     });
-    return response.body.items;
+    return response.body;
   } catch (error) {
     console.error({ error });
   }

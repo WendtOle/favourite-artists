@@ -1,32 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TimeRange, topTracks } from "./lib/actions";
 import { TimeRangeToggle } from "./TimeRangeToggle";
 import Link from "next/link";
 import { AuthorizationTokens } from "./types";
 import { refreshAccessToken } from "./lib/clientActions";
+import { useQuery } from "@tanstack/react-query";
+import { FaSpinner } from "react-icons/fa";
 
 export const TopTracks = ({
   authorizationTokens,
 }: {
   authorizationTokens: AuthorizationTokens;
 }) => {
-  const [tracks, setTracks] = useState<SpotifyApi.TrackObjectFull[]>([]);
   const [timeRange, setTimeRange] = useState<TimeRange>("medium_term");
 
-  useEffect(() => {
-    const setTopArtists = async () => {
+  const { isPending, data: tracks } = useQuery({
+    queryKey: ["topTracks", timeRange],
+    queryFn: async () => {
       await refreshAccessToken(authorizationTokens);
-      topTracks(authorizationTokens, timeRange).then((tracks) => {
-        if (!tracks) {
-          return;
-        }
-        setTracks(tracks);
-      });
-    };
-    setTopArtists();
-  }, [authorizationTokens, timeRange]);
+      const response = await topTracks(authorizationTokens, timeRange);
+      if (!response) {
+        return null;
+      }
+      return response.items;
+    },
+  });
 
   if (!authorizationTokens) {
     return null;
@@ -36,13 +36,16 @@ export const TopTracks = ({
     <div className="max-w-2xl w-full">
       <div className="flex justify-between items-center p-2 w-full">
         <h2 className="text-xl">Top Tracks</h2>
-        <TimeRangeToggle
-          setTimeRange={setTimeRange}
-          selectedTimeRange={timeRange}
-        />
+        <div className="flex flex-row items-center">
+          {isPending && <FaSpinner className="animate-spin mr-1" />}
+          <TimeRangeToggle
+            setTimeRange={setTimeRange}
+            selectedTimeRange={timeRange}
+          />
+        </div>
       </div>
       <ul className="ml-4 max-h-80 overflow-scroll">
-        {tracks.map((track) => (
+        {(tracks ?? []).map((track) => (
           <li key={track.id} className="mb-2 text-sm">
             <Link href={track.external_urls.spotify} target="_blank">
               <p>{track.name}</p>
