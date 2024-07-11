@@ -96,7 +96,6 @@ export const topArtists = async (
   try {
     const response = await spotifyApi.getMyTopArtists({
       time_range: timeRange,
-      limit: 50,
     });
     return response.body;
   } catch (error) {
