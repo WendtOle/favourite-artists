@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { tokens as getTokens } from "../lib/actions";
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { AUTHORIZATION_TOKENS } from "../types";
 
 export default function Home() {
   return (
@@ -27,8 +28,7 @@ const InnerHome = () => {
       if (!tokens) {
         return;
       }
-      localStorage.setItem("accessToken", tokens.accessToken);
-      localStorage.setItem("refreshToken", tokens.refreshToken);
+      localStorage.setItem(AUTHORIZATION_TOKENS, JSON.stringify(tokens));
       window.history.replaceState({}, "", "/");
     });
   }, []);
@@ -37,10 +37,7 @@ const InnerHome = () => {
     if (areTokensSet) {
       return;
     }
-    if (
-      localStorage.getItem("accessToken") &&
-      localStorage.getItem("refreshToken")
-    ) {
+    if (localStorage.getItem(AUTHORIZATION_TOKENS)) {
       setAreTokensSet(true);
     }
   });

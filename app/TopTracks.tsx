@@ -4,21 +4,31 @@ import { useEffect, useState } from "react";
 import { TimeRange, topTracks } from "./lib/actions";
 import { TimeRangeToggle } from "./TimeRangeToggle";
 import Link from "next/link";
+import { AuthorizationTokens } from "./types";
+import { refreshAccessToken } from "./lib/clientActions";
 
-export const TopTracks = ({ accessToken }: { accessToken: string }) => {
+export const TopTracks = ({
+  authorizationTokens,
+}: {
+  authorizationTokens: AuthorizationTokens;
+}) => {
   const [tracks, setTracks] = useState<SpotifyApi.TrackObjectFull[]>([]);
   const [timeRange, setTimeRange] = useState<TimeRange>("medium_term");
 
   useEffect(() => {
-    topTracks(accessToken, timeRange).then((tracks) => {
-      if (!tracks) {
-        return;
-      }
-      setTracks(tracks);
-    });
-  }, [accessToken, timeRange]);
+    const setTopArtists = async () => {
+      await refreshAccessToken(authorizationTokens);
+      topTracks(authorizationTokens, timeRange).then((tracks) => {
+        if (!tracks) {
+          return;
+        }
+        setTracks(tracks);
+      });
+    };
+    setTopArtists();
+  }, [authorizationTokens, timeRange]);
 
-  if (!accessToken) {
+  if (!authorizationTokens) {
     return null;
   }
 

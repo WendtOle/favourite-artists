@@ -3,19 +3,29 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { TopArtists } from "./TopArtists";
 import { TopTracks } from "./TopTracks";
+import {
+  assertAuthorizationTokens,
+  AUTHORIZATION_TOKENS,
+  AuthorizationTokens,
+} from "./types";
 
 export default function Main({ url }: { url: string }) {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<
+    AuthorizationTokens | undefined
+  >(undefined);
 
   useEffect(() => {
     if (accessToken) {
       return;
     }
-    if (
-      localStorage.getItem("accessToken") &&
-      localStorage.getItem("refreshToken")
-    ) {
-      setAccessToken(localStorage.getItem("accessToken"));
+    if (localStorage.getItem(AUTHORIZATION_TOKENS)) {
+      const rawTokenStrings = localStorage.getItem(AUTHORIZATION_TOKENS);
+      if (!rawTokenStrings) {
+        throw new Error("No tokens found");
+      }
+      const rawTokens = JSON.parse(rawTokenStrings);
+      assertAuthorizationTokens(rawTokens);
+      setAccessToken(rawTokens);
     }
   });
 
@@ -29,8 +39,8 @@ export default function Main({ url }: { url: string }) {
 
   return (
     <div className="flex flex-col items-center">
-      <TopArtists accessToken={accessToken} />
-      <TopTracks accessToken={accessToken} />
+      <TopArtists authorizationTokens={accessToken} />
+      <TopTracks authorizationTokens={accessToken} />
     </div>
   );
 }
