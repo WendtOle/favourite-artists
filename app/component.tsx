@@ -8,6 +8,9 @@ import {
   AUTHORIZATION_TOKENS,
   AuthorizationTokens,
 } from "./types";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function Main({ url }: { url: string }) {
   const [accessToken, setAccessToken] = useState<
@@ -38,9 +41,11 @@ export default function Main({ url }: { url: string }) {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <TopArtists authorizationTokens={accessToken} />
-      <TopTracks authorizationTokens={accessToken} />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="flex flex-col items-center">
+        <TopArtists authorizationTokens={accessToken} />
+        <TopTracks authorizationTokens={accessToken} />
+      </div>
+    </QueryClientProvider>
   );
 }
